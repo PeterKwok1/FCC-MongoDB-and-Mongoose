@@ -1,10 +1,17 @@
 require('dotenv').config();
 let mongoose = require("mongoose")
 
-mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+// collects = tables
+// documents = rows
+// fields = columns
+// schema = table definition
+// schemaTypes = types of schema
+// models = constructors which take schema and create an instance of a document
 
-const Schema = mongoose.Schema
-const personSchema = new Schema({
+mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true }) // connect to db using uri
+
+const Schema = mongoose.Schema // (presumably) destructured schema class
+const personSchema = new Schema({ // schema
   name: {
     type: String,
     required: true
@@ -13,10 +20,18 @@ const personSchema = new Schema({
   favoriteFoods: [String]
 })
 
-let Person = mongoose.model('Person', personSchema);
+let Person = mongoose.model('Person', personSchema); // model 
 
 const createAndSavePerson = (done) => {
-  done(null /*, data*/);
+  const tomBoom = Person({
+    name: "Tom Boom",
+    age: 28,
+    favoriteFoods: "Watermelon"
+  })
+  tomBoom.save((err, data) => {
+    if (err) return console.error(err)
+    done(null, data);
+  })
 };
 
 const createManyPeople = (arrayOfPeople, done) => {
