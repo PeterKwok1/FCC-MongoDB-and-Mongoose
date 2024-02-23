@@ -83,19 +83,30 @@ const findAndUpdate = (personName, done) => {
 };
 
 const removeById = (personId, done) => {
-  done(null /*, data*/);
+  Person.findByIdAndRemove(personId, (err, removedPerson) => {
+    if (err) return console.error(err)
+    done(null, removedPerson)
+  })
 };
 
 const removeManyPeople = (done) => {
   const nameToRemove = "Mary";
-
-  done(null /*, data*/);
+  Person.remove({ name: nameToRemove }, (err, outcome) => {
+    if (err) return console.error(err)
+    done(null, outcome)
+  })
 };
 
 const queryChain = (done) => {
   const foodToSearch = "burrito";
-
-  done(null /*, data*/);
+  Person.find({ favoriteFoods: foodToSearch })
+    .sort({ name: 1 })
+    .limit(2)
+    .select("-age")
+    .exec((err, people) => {
+      if (err) return console.error(err)
+      done(null, people);
+    })
 };
 
 /** **Well Done !!**
